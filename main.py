@@ -79,4 +79,4 @@ if __name__ == '__main__':
     print(RunRNA('ggggaaaacccc'))
     print(RunRNA('gggggaaaaccccc'))
     print(RunRNA('acaugauggccaugu'))
-    print(RunRNA('cagaucggcgauacgagcauagcaaugcuaagcgagcuuagcugca'))
+    #print(RunRNA('cagaucggcgauacgagcauagcaaugcuaagcgagcuuagcugca'))
