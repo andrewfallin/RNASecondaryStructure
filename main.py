@@ -43,8 +43,6 @@ def RunRNA(myString):
 
     # Call recover to print the structure
 
-
-    print(OPT)
     # Pseudocode OPT(1,n)
     return OPT[1][len(myArray)]
 
