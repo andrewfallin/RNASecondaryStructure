@@ -1,30 +1,50 @@
-# This is a sample Python script.
-
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
-
-
 import numpy as np
 
-def RNA(b_string):
-    #convert b_string to array of b1 to bn {AUCG} characters
-    b_arr=list(b_string)
-    n = len(b_arr)
-    if {b_arr[1], b_arr[7]} == ({'A', 'U'}):
-        print("works")
-    #create matrix to store subproblem solutions
-    M = np.zeros((n,n),dtype=int)
-    print(f'{np.array(M)}')
-    #Initialize M(i,j)=0 whenever i >= j-4
+def get_Pairing(i, j, myArray):
+    j_Char = myArray[j]
+    maxT = i
+    for t in range(i, j-1):
+        t_Char = myArray[t]
+        if j_Char == 'A' and t_Char == 'U':
+            maxT = t
+        elif j_Char == 'C' and t_Char == 'G':
+            maxT = t
+        elif j_Char == 'U' and t_Char == 'A':
+            maxT = t
+        elif j_Char == 'G' and t_Char == 'C':
+            maxT = t
+    return maxT
+
+def RunRNA(myString):
+    thing=[]
+    myArray = list(myString.upper())
+    n = len(myArray)
+    OPT = np.empty((n+1,n+1),dtype=int)
+    for i in range(n+1):
+        for j in range(n+1):
+            OPT[i][j] = 0
     for k in range(5, n):
-        for i in range (1,k):
+        for i in range(1,n-k+1):
             j=i+k
-            if i >= (j-4):
-                M[i,j] = 0
-            #check if b_j is involved in a pair
-            #if (b_arr[i] == 'A' && b_arr[j] == 'C') || (b_arr[i] == 'C' && b_arr[j] == 'A') || (b_arr[i] == 'U' && b_arr[j] == 'C') || (b_arr[i] == 'A' && b_arr[j] == 'C'):
-            #M(i,j)=
-    return M[1,n]
+            if i >= j-4:
+                OPT[i][j] = 0
+            else:
+                t = get_Pairing(i-1, j-1, myArray)
+                num1 = OPT[i][j - 1]
+                num2 = 1 + OPT[i][t - 1] + OPT[t + 1][j - 1]
+                # if i <= t and t <= (j-1):
+                #     num2 = 1 + OPT[i][t - 1] + OPT[t + 1][j - 1]
+                # else:
+                #     num2 = 0
+                OPT[i][j] = max(num1, num2)
+                # store t's here to be space efficient
+                OPT[j][i] = t
+
+
+    # Call recover to print the structure
+
+    # Pseudocode OPT(1,n)
+    return OPT[1][len(myArray)]
 
 
 def recover():
@@ -32,6 +52,8 @@ def recover():
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    RNA('AACGCGUU')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    print("Pairs:",RunRNA('AACGCGUU'))
+    print("Pairs:",RunRNA('ACCGGUAGU'))
+    print("Pairs:",RunRNA('ggggaaaacccc'))
+    print("Pairs:", RunRNA('gggggaaaaccccc'))
+    print("Pairs:", RunRNA('ggggggaaaacccccc'))
