@@ -1,32 +1,6 @@
-# This is a sample Python script.
-
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
 import numpy as np
-'''
-import numPy as np
-def RNA(b_string):
-    #convert b_string to array of b1 to bn {AUCG} characters
-    b_arr=list(b_string)
-    n = len(b_arr)
-    if {b_arr[1], b_arr[7]} == ({'A', 'U'}):
-        print("works")
-    #create matrix to store subproblem solutions
-    M = np.zeros((n,n),dtype=int)
-    print(f'{np.array(M)}')
-    #Initialize M(i,j)=0 whenever i >= j-4
-    for k in range(5, n):
-        for i in range (1,k):
-            j=i+k
-            if i >= (j-4):
-                M[i,j] = 0
-            #check if b_j is involved in a pair
-            #if (b_arr[i] == 'A' && b_arr[j] == 'C') || (b_arr[i] == 'C' && b_arr[j] == 'A') || (b_arr[i] == 'U' && b_arr[j] == 'C') || (b_arr[i] == 'A' && b_arr[j] == 'C'):
-            #M(i,j)=
-    return M[1,n]
-'''
-def get_Pairing(i, j, myArray):
 
+def get_Pairing(i, j, myArray):
     j_Char = myArray[j]
     maxT = i
     for t in range(i, j-1):
@@ -41,32 +15,34 @@ def get_Pairing(i, j, myArray):
             maxT = t
     return maxT
 
-def RNA_Recursion(i, j, myArray):
-
-    if i >= j-4:
-        return 0
-    else:
-        t = get_Pairing(i, j, myArray)
-        num1 = RNA_Recursion(i, j - 1, myArray)
-        num2 = 1 + RNA_Recursion(i, t-1, myArray) + RNA_Recursion(t+1, j, myArray)
-        return max(num1, num2)
-
-
 def RunRNA(myString):
     myArray = list(myString.upper())
-    OPT = np.empty((len(myArray),len(myArray)))
-    for i in range(len(myArray)):
-        for j in range(len(myArray)):
-            #thing.append(RNA_Recursion(i, j, myArray))
-            OPT[i][j] = RNA_Recursion(i, j, myArray)
-
+    n = len(myArray)
+    OPT = np.empty((n+1,n+1),dtype=int)
+    for i in range(n+1):
+        for j in range(n+1):
+            OPT[i][j] = 0
+    for k in range(5, n):
+        for i in range(1,n-k+1):
+            j=i+k
+            if i >= j-4:
+                OPT[i][j] = 0
+            else:
+                t=1
+                t = get_Pairing(i-1, j-1, myArray)
+                num1 = OPT[i][j - 1]
+                num2 = 1 + OPT[i][t-1] + OPT[t+1][j-1]
+                OPT[i][j] = max(num1, num2)
     #store t's here to be space efficient
     for i in range(len(myArray)):
         for j in range(0,i):
             OPT[i][j] = OPT[j][i]
 
+    # Call recover to print the structure
+
+
     # Pseudocode OPT(1,n)
-    return OPT[0][len(myArray)-1]
+    return OPT[1][len(myArray)]
 
 
 def recover():
@@ -75,8 +51,6 @@ def recover():
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     # RNA('AACGCGUU')
-    print(RunRNA('AACGCGUU'))
-    print(RunRNA('ggggaaaacccc'))
-    print(RunRNA('gggggaaaaccccc'))
-    print(RunRNA('acaugauggccaugu'))
-    #print(RunRNA('cagaucggcgauacgagcauagcaaugcuaagcgagcuuagcugca'))
+    print("Pairs:",RunRNA('AACGCGUU'))
+    print("Pairs:",RunRNA('ACCGGUAGU'))
+    print("Pairs:",RunRNA('ggggaaaacccc'))
