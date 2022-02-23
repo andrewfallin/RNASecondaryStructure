@@ -16,6 +16,7 @@ def get_Pairing(i, j, myArray):
     return maxT
 
 def RunRNA(myString):
+    thing=[]
     myArray = list(myString.upper())
     n = len(myArray)
     OPT = np.empty((n+1,n+1),dtype=int)
@@ -28,19 +29,22 @@ def RunRNA(myString):
             if i >= j-4:
                 OPT[i][j] = 0
             else:
-                t=1
                 t = get_Pairing(i-1, j-1, myArray)
                 num1 = OPT[i][j - 1]
-                num2 = 1 + OPT[i][t-1] + OPT[t+1][j-1]
+                num2 = 1 + OPT[i][t - 1] + OPT[t + 1][j - 1]
+                # if i <= t and t <= (j-1):
+                #     num2 = 1 + OPT[i][t - 1] + OPT[t + 1][j - 1]
+                # else:
+                #     num2 = 0
                 OPT[i][j] = max(num1, num2)
-    #store t's here to be space efficient
-    for i in range(len(myArray)):
-        for j in range(0,i):
-            OPT[i][j] = OPT[j][i]
+                # store t's here to be space efficient
+                OPT[j][i] = t
+
 
     # Call recover to print the structure
 
 
+    print(OPT)
     # Pseudocode OPT(1,n)
     return OPT[1][len(myArray)]
 
@@ -50,7 +54,8 @@ def recover():
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    # RNA('AACGCGUU')
     print("Pairs:",RunRNA('AACGCGUU'))
     print("Pairs:",RunRNA('ACCGGUAGU'))
     print("Pairs:",RunRNA('ggggaaaacccc'))
+    print("Pairs:", RunRNA('gggggaaaaccccc'))
+    print("Pairs:", RunRNA('ggggggaaaacccccc'))
