@@ -25,6 +25,11 @@ def RNA(b_string):
             #M(i,j)=
     return M[1,n]
 '''
+
+'''
+Does the comparison to see if there are pairings, 
+if there are it returns the max index of the pairing
+'''
 def get_Pairing(i, j, myArray):
 
     j_Char = myArray[j]
@@ -41,17 +46,26 @@ def get_Pairing(i, j, myArray):
             maxT = t
     return maxT
 
+'''
+Actually runs the recursion
+'''
 def RNA_Recursion(i, j, myArray):
 
+    # base case
     if i >= j-4:
         return 0
     else:
+        # recurrence relation
         t = get_Pairing(i, j, myArray)
         num1 = RNA_Recursion(i, j - 1, myArray)
         num2 = 1 + RNA_Recursion(i, t-1, myArray) + RNA_Recursion(t+1, j, myArray)
         return max(num1, num2)
 
-
+'''
+Main driver, 
+Loops through the array and stores the maximum value returned
+NOTE: Can be modified to store values in a Matrix
+'''
 def RunRNA(myString):
     myArray = list(myString.upper())
     thing = []
@@ -60,19 +74,14 @@ def RunRNA(myString):
         for j in range(len(myArray)):
             #thing.append(RNA_Recursion(i, j, myArray))
             myVal = RNA_Recursion(i, j, myArray)
+            # Store myVal at the i,j point in the matrix
             if myVal > maxVal:
                 maxVal = myVal
 
     return maxVal
 
-
-def recover():
-    print("hi")
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     # RNA('AACGCGUU')
     print(RunRNA('AACGCGUU'))
     print(RunRNA('ggggaaaacccc'))
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
