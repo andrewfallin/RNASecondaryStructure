@@ -19,10 +19,9 @@ def RunRNA(myString):
     thing=[]
     myArray = list(myString.upper())
     n = len(myArray)
-    OPT = np.empty((n+1,n+1),dtype=int)
-    for i in range(n+1):
-        for j in range(n+1):
-            OPT[i][j] = 0
+
+    OPT = np.zeros((n+1, n+1), dtype= int)
+
     for k in range(5, n):
         for i in range(1,n-k+1):
             j=i+k
@@ -40,11 +39,11 @@ def RunRNA(myString):
                 # store t's here to be space efficient
                 OPT[j][i] = t
 
-
     # Call recover to print the structure
 
     # Pseudocode OPT(1,n)
     return OPT[1][n]
+
 
 
 def recover():
