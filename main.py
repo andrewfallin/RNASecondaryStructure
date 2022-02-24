@@ -31,10 +31,6 @@ def RunRNA(myString):
                 t = get_Pairing(i-1, j-1, myArray)
                 num1 = OPT[i][j - 1]
                 num2 = 1 + OPT[i][t - 1] + OPT[t + 1][j - 1]
-                # if i <= t and t <= (j-1):
-                #     num2 = 1 + OPT[i][t - 1] + OPT[t + 1][j - 1]
-                # else:
-                #     num2 = 0
                 OPT[i][j] = max(num1, num2)
                 # store t's here to be space efficient
                 OPT[j][i] = t
